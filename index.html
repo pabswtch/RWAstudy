@@ -20,6 +20,7 @@ header span{font-size:13px;color:#888}
 .legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px;font-size:12px;color:#666}
 .legend-item{display:flex;align-items:center;gap:7px}
 .legend-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+.explainer-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;position:relative;top:1px;}
 .filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-label{font-size:12px;color:#888;margin-right:2px}
 .fb{background:#fff;border:0.5px solid rgba(0,0,0,.15);border-radius:7px;padding:6px 13px;font-size:12px;cursor:pointer;color:#333;transition:all .12s;font-family:inherit}
@@ -98,15 +99,19 @@ header span{font-size:13px;color:#888}
 <div class="explainers">
   <h3>Filter Definitions</h3>
   <div class="explainer-item">
+    <span class="explainer-dot" style="background:#1D9E75"></span>
     <strong>Feed ready</strong> — Publicly priced instruments with accessible APIs or data feeds. Switchboard can pull from Bloomberg, Alpaca, EMMA, exchange feeds, fund company APIs, etc.
   </div>
   <div class="explainer-item">
+    <span class="explainer-dot" style="background:#EF9F27"></span>
     <strong>Partial</strong> — Data exists somewhere but requires custom data source configuration by the builder.
   </div>
   <div class="explainer-item">
+    <span class="explainer-dot" style="background:#B4B2A9"></span>
     <strong>Not feasible</strong> — Not oracle-able due to: legal non-transferability, dead/obsolete markets, pure tax instruments, individualized instruments, or structurally non-standardizable assets.
   </div>
   <div class="explainer-item">
+    <span class="explainer-dot" style="background:#7F77DD"></span>
     <strong>Privacy Override</strong> — Sensitive or confidential underlying data that should be kept private from the oracle operator and on-chain observers. Needs Data Feed Variable Overrides to preserve privacy.
   </div>
 </div>
@@ -206,6 +211,44 @@ function render(){
 
 window.addEventListener('resize',render);
 setTimeout(render,80);
+</script>
+<script>
+const FILTER_EXPLAINERS = {
+  all: "Show all yield sources across all categories.",
+  Yes: "Feed ready — Publicly priced instruments with accessible APIs or data feeds. Switchboard can pull from Bloomberg, Alpaca, EMMA, exchange feeds, fund company APIs, etc.",
+  Partial: "Partial — Data exists somewhere but requires custom data source configuration by the builder.",
+  No: "Not feasible — Not oracle-able due to: legal non-transferability, dead/obsolete markets, pure tax instruments, individualized instruments, or structurally non-standardizable assets.",
+  priv: "Privacy Override — Sensitive or confidential underlying data that should be kept private from the oracle operator and on-chain observers. Needs Data Feed Variable Overrides to preserve privacy."
+};
+
+const tooltip = document.getElementById("tooltip");
+const ttName = document.getElementById("tt-name");
+const ttCat = document.getElementById("tt-cat");
+const ttSub = document.getElementById("tt-sub");
+const ttTags = document.getElementById("tt-tags");
+
+// Attach hover listeners to filter buttons
+document.querySelectorAll(".fb").forEach(btn => {
+  btn.addEventListener("mouseenter", (e) => {
+    const filterKey = btn.getAttribute("onclick").match(/'([^']+)'/)[1];
+
+    ttName.innerText = btn.innerText.trim();
+    ttCat.innerText = "Filter definition";
+    ttSub.innerText = FILTER_EXPLAINERS[filterKey] || "";
+    ttTags.innerHTML = "";
+
+    tooltip.style.opacity = 1;
+  });
+
+  btn.addEventListener("mousemove", (e) => {
+    tooltip.style.left = (e.clientX + 12) + "px";
+    tooltip.style.top = (e.clientY + 12) + "px";
+  });
+
+  btn.addEventListener("mouseleave", () => {
+    tooltip.style.opacity = 0;
+  });
+});
 </script>
 </body>
 </html>
