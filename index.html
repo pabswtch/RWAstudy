@@ -41,6 +41,23 @@ header span{font-size:13px;color:#888}
 .tag-partial{background:#FAEEDA;color:#633806}
 .tag-no{background:#f0f0ee;color:#555}
 .tag-priv{background:#EEEDFE;color:#3C3489}
+.explainers{
+  margin-top:28px;
+  padding:18px 20px;
+  background:#fff;
+  border:0.5px solid rgba(0,0,0,.08);
+  border-radius:12px;}
+.explainers h3{
+  font-size:14px;
+  margin-bottom:12px;
+  color:#1a1a18;}
+.explainer-item{
+  font-size:12px;
+  color:#444;
+  margin-bottom:10px;
+  line-height:1.5;}
+.explainer-item strong{
+  color:#1a1a18;}
 </style>
 </head>
 <body>
@@ -63,14 +80,35 @@ header span{font-size:13px;color:#888}
   </div>
   <div class="filters">
     <span class="filter-label">Filter:</span>
-    <button class="fb active-all" onclick="setFilter('all',this)">All 501</button>
-    <button class="fb" onclick="setFilter('Yes',this)">Feed ready (132)</button>
-    <button class="fb" onclick="setFilter('Partial',this)">Partial (337)</button>
-    <button class="fb" onclick="setFilter('No',this)">Not feasible (32)</button>
-    <button class="fb" onclick="setFilter('priv',this)">Privacy override (131)</button>
+    <button class="fb active-all" onclick="setFilter('all',this)" title="Show all yield sources across all categories.">All 501</button>
+    <button class="fb" onclick="setFilter('Yes',this)" title="Feed ready — Publicly priced instruments with accessible APIs or data feeds. Switchboard can pull from Bloomberg, Alpaca, EMMA, exchange feeds, fund company APIs, etc.">
+    Feed ready (132)
+    </button>
+    <button class="fb" onclick="setFilter('Partial',this)" title="Partial — Data exists somewhere but requires custom data source configuration by the builder.">
+    Partial (337)
+    </button>
+    <button class="fb" onclick="setFilter('No',this)" title="Not feasible — Not oracle-able due to: legal non-transferability, dead/obsolete markets, pure tax instruments, individualized instruments, or structurally non-standardizable assets.">
+    Not feasible (32)
+    </button>
+    <button class="fb" onclick="setFilter('priv',this)" title="Privacy Override — Sensitive or confidential underlying data that should be kept private from the oracle operator and on-chain observers. Needs Data Feed Variable Overrides to preserve privacy.">
+    Privacy override (131)
+  </button>
+<div id="chart"></div>
+<div id="status-bar">Hover any cell to inspect — each cell is one yield source</div>
+<div class="explainers">
+  <h3>Filter Definitions</h3>
+  <div class="explainer-item">
+    <strong>Feed ready</strong> — Publicly priced instruments with accessible APIs or data feeds. Switchboard can pull from Bloomberg, Alpaca, EMMA, exchange feeds, fund company APIs, etc.
   </div>
-  <div id="chart"></div>
-  <div id="status-bar">Hover any cell to inspect — each cell is one yield source</div>
+  <div class="explainer-item">
+    <strong>Partial</strong> — Data exists somewhere but requires custom data source configuration by the builder.
+  </div>
+  <div class="explainer-item">
+    <strong>Not feasible</strong> — Not oracle-able due to: legal non-transferability, dead/obsolete markets, pure tax instruments, individualized instruments, or structurally non-standardizable assets.
+  </div>
+  <div class="explainer-item">
+    <strong>Privacy Override</strong> — Sensitive or confidential underlying data that should be kept private from the oracle operator and on-chain observers. Needs Data Feed Variable Overrides to preserve privacy.
+  </div>
 </div>
 <div id="tooltip">
   <div class="tt-name" id="tt-name"></div>
